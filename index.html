@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>World Model Learning &amp; WorldArena Challenge</title>
+  <meta name="description" content="世界模型学习与WorldArena实验进展 — ABot、Wan2.1、VideoX-Fun SFT三方对比，展示机器人视频世界模型的最新研究成果。">
+  <meta property="og:image" content="videos/teaser.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ===== Navigation ===== -->
+  <nav>
+    <a href="#overview">Overview</a>
+    <a href="#comparison">Comparison</a>
+    <a href="#metrics">Metrics</a>
+    <a href="#cases">Cases</a>
+    <a href="#methods">Methods</a>
+    <a href="#insights">Insights</a>
+  </nav>
+
+  <!-- ===== Hero ===== -->
+  <header class="hero">
+    <h1>World Model Learning<br>for Robot Video Generation</h1>
+    <p class="subtitle">From Paper Reproduction to WorldArena Challenge — ABot · Wan2.1 · VideoX-Fun SFT</p>
+    <div class="tags">
+      <span class="tag">Video World Model</span>
+      <span class="tag">Embodied AI</span>
+      <span class="tag">Robotic Manipulation</span>
+      <span class="tag">LoRA SFT</span>
+      <span class="tag">WorldArena Benchmark</span>
+    </div>
+    <div class="meta-links">
+      <a href="#overview">Project Overview</a>
+      <a href="https://github.com/amap-cvlab/ABot-PhysWorld" target="_blank">ABot-PhysWorld</a>
+      <a href="https://github.com/Wan-AI/Wan2.1" target="_blank">Wan2.1</a>
+      <a href="https://github.com/ali-vilab/VideoX-Fun" target="_blank">VideoX-Fun</a>
+      <a href="https://github.com/open-gigaai/giga-world-0" target="_blank">GigaWorld</a>
+    </div>
+  </header>
+
+  <!-- ===== Overview ===== -->
+  <section id="overview">
+    <div class="section-header">
+      <span class="accent-bar"></span>
+      <h2>Project <span class="highlight">Overview</span></h2>
+    </div>
+    <p class="section-desc">
+      This project completes the full cycle of "paper reading → code reproduction → WorldArena inference &amp; evaluation → fine-tuning → comparative analysis" for robot video world models. We benchmark ABot-PhysWorld (robot-specific), vanilla Wan2.1 (general video model), and SFT-Wan2.1 (LoRA fine-tuned on RoboTwin) on the WorldArena Challenge Track 1.
+    </p>
+
+    <!-- Pipeline -->
+    <div class="pipeline">
+      <div class="step"><span class="step-icon">📄</span>Paper Study</div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="step-icon">🔧</span>Code Reproduction</div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="step-icon">🎬</span>Inference</div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="step-icon">📊</span>Evaluation</div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="step-icon">🎯</span>SFT Tuning</div>
+      <span class="arrow">→</span>
+      <div class="step"><span class="step-icon">📈</span>Analysis</div>
+    </div>
+
+    <!-- Model comparison teaser -->
+    <div style="margin-top: 2.5rem;">
+      <h3 style="font-size:1.1rem; margin-bottom:0.75rem; color:var(--primary);">Three-Way Comparison: ABot vs Vanilla Wan2.1 vs SFT-Wan2.1</h3>
+      <div class="comparison-row" style="grid-template-columns: 1fr 1fr 1fr;">
+        <div class="video-card">
+          <video controls autoplay loop muted playsinline>
+            <source src="videos/episode10_abot.mp4" type="video/mp4">
+          </video>
+          <div class="comparison-label abot">ABot-PhysWorld</div>
+        </div>
+        <div class="video-card">
+          <video controls autoplay loop muted playsinline>
+            <source src="videos/episode10_wan.mp4" type="video/mp4">
+          </video>
+          <div class="comparison-label wan">Vanilla Wan2.1</div>
+        </div>
+        <div class="video-card">
+          <video controls autoplay loop muted playsinline>
+            <source src="videos/episode10_sft.mp4" type="video/mp4">
+          </video>
+          <div class="comparison-label sft">SFT-Wan2.1 (Ours)</div>
+        </div>
+      </div>
+      <p style="text-align:center; font-size:0.82rem; color:var(--text-light);">Case 10 — Robot arm interacts with objects on a table. Organized scene setting.</p>
+    </div>
+  </section>
+
+  <!-- ===== Comparison Section ===== -->
+  <section id="comparison" class="alt">
+    <div class="section-header">
+      <span class="accent-bar"></span>
+      <h2>Video <span class="highlight">Comparison</span></h2>
+    </div>
+    <p class="section-desc">
+      Side-by-side comparisons across three models on representative cases. Videos show the same instruction and initial frame with different backbones.
+    </p>
+
+    <!-- Case 106 - Success -->
+    <h3 style="font-size:1.05rem; margin-bottom:0.5rem; color:var(--accent2);">✅ Success Case — Episode 106</h3>
+    <p style="font-size:0.85rem; color:var(--text-light); margin-bottom:1rem;">All three models produce reasonable robot manipulation. Note differences in background stability, subject consistency, and visual quality.</p>
+    <div class="comparison-row">
+      <div class="video-card">
+        <video controls autoplay loop muted playsinline>
+          <source src="videos/episode106_abot.mp4" type="video/mp4">
+        </video>
+        <div class="comparison-label abot">ABot-PhysWorld</div>
+      </div>
+      <div class="video-card">
+        <video controls autoplay loop muted playsinline>
+          <source src="videos/episode106_wan.mp4" type="video/mp4">
+        </video>
+        <div class="comparison-label wan">Vanilla Wan2.1</div>
+      </div>
+      <div class="video-card">
+        <video controls autoplay loop muted playsinline>
+          <source src="videos/episode106_sft.mp4" type="video/mp4">
+        </video>
+        <div class="comparison-label sft">SFT-Wan2.1 (Ours)</div>
+      </div>
+    </div>
+
+    <!-- Failure cases -->
+    <h3 style="font-size:1.05rem; margin-bottom:0.5rem; margin-top:2rem; color:var(--accent);">❌ Failure Cases</h3>
+    <p style="font-size:0.85rem; color:var(--text-light); margin-bottom:1rem;">Vanilla Wan2.1 exhibits human hand hallucination, while ABot maintains robot identity but may show incomplete actions.</p>
+    <div class="video-grid cols-3">
+      <div class="video-card">
+        <video controls autoplay loop muted playsinline>
+          <source src="videos/episode1_wan_fail.mp4" type="video/mp4">
+        </video>
+        <div class="card-body">
+          <div class="card-label wan">Wan2.1 Failure</div>
+          <div class="card-desc">Ep 1 — Human hand hallucination: general video model generates a human hand instead of a robotic gripper.</div>
+        </div>
+      </div>
+      <div class="video-card">
+        <video controls autoplay loop muted playsinline>
+          <source src="videos/episode100_abot_fail.mp4" type="video/mp4">
+        </video>
+        <div class="card-body">
+          <div class="card-label abot">ABot Failure</div>
+          <div class="card-desc">Ep 100 — Instruction not fully followed: the arm motion is incomplete or misaligned with the text command.</div>
+        </div>
+      </div>
+      <div class="video-card">
+        <video controls autoplay loop muted playsinline>
+          <source src="videos/episode10_wan_fail.mp4" type="video/mp4">
+        </video>
+        <div class="card-body">
+          <div class="card-label wan">Wan2.1 Failure</div>
+          <div class="card-desc">Ep 10 — Robot arm identity drift: the model loses the robotic arm and generates artifacts.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SeedVR Enhancement ===== -->
+  <section>
+    <div class="section-header">
+      <span class="accent-bar"></span>
+      <h2>SeedVR <span class="highlight">Post-Processing</span></h2>
+    </div>
+    <p class="section-desc">
+      We apply SeedVR video refiner as post-processing to enhance visual quality. Below is a before/after comparison.
+    </p>
+    <div class="video-grid cols-2">
+      <div class="video-card">
+        <video controls autoplay loop muted playsinline>
+          <source src="videos/episode105_wan_raw.mp4" type="video/mp4">
+        </video>
+        <div class="card-body">
+          <div class="card-label wan">Before SeedVR</div>
+          <div class="card-desc">Episode 105 — Raw Wan2.1 output with baseline visual quality.</div>
+        </div>
+      </div>
+      <div class="video-card">
+        <video controls autoplay loop muted playsinline>
+          <source src="videos/episode105_wan_seedvr.mp4" type="video/mp4">
+        </video>
+        <div class="card-body">
+          <div class="card-label seedvr">After SeedVR</div>
+          <div class="card-desc">Episode 105 — Refined output: improved sharpness and reduced artifacts.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Metrics ===== -->
+  <section id="metrics" class="alt">
+    <div class="section-header">
+      <span class="accent-bar"></span>
+      <h2>Evaluation <span class="highlight">Metrics</span></h2>
+    </div>
+    <p class="section-desc">
+      WorldArena Track 1 standard metrics (0–100, higher is better). Results on 10-sample formal specification.
+    </p>
+    <div class="table-wrapper">
+      <table class="metrics">
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>ABot</th>
+            <th>Vanilla Wan2.1</th>
+            <th>SFT-Wan2.1 (Ours)</th>
+            <th>Preliminary Takeaway</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Image Quality</td>
+            <td>55.20</td>
+            <td class="best">70.44</td>
+            <td>48.80</td>
+            <td>Vanilla Wan has best visual quality</td>
+          </tr>
+          <tr>
+            <td>Aesthetic Quality</td>
+            <td>38.54</td>
+            <td class="best">45.35</td>
+            <td>40.64</td>
+            <td>Vanilla Wan leads in aesthetics</td>
+          </tr>
+          <tr>
+            <td>Background Consistency</td>
+            <td class="best">91.18</td>
+            <td>69.58</td>
+            <td>90.40</td>
+            <td>ABot &amp; SFT-Wan keep background stable</td>
+          </tr>
+          <tr>
+            <td>Dynamic Degree</td>
+            <td class="best">37.70</td>
+            <td>27.18</td>
+            <td>37.53</td>
+            <td>ABot / SFT-Wan produce more motion</td>
+          </tr>
+          <tr>
+            <td>Flow Score</td>
+            <td>17.96</td>
+            <td>16.18</td>
+            <td class="best">21.29</td>
+            <td>SFT-Wan improves temporal flow</td>
+          </tr>
+          <tr>
+            <td>Subject Consistency</td>
+            <td class="best">82.55</td>
+            <td>59.90</td>
+            <td>82.33</td>
+            <td>ABot &amp; SFT-Wan keep subject identity</td>
+          </tr>
+          <tr>
+            <td>Interaction Quality</td>
+            <td>54.00</td>
+            <td class="best">58.00</td>
+            <td>—</td>
+            <td>SFT-Wan VLM results pending</td>
+          </tr>
+          <tr>
+            <td>Perspectivity</td>
+            <td>88.00</td>
+            <td class="best">92.00</td>
+            <td>—</td>
+            <td>Vanilla Wan slightly better</td>
+          </tr>
+          <tr>
+            <td>Instruction Following</td>
+            <td>54.00</td>
+            <td>54.00</td>
+            <td>—</td>
+            <td>ABot &amp; Wan tied; SFT-Wan pending</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:0.82rem; color:var(--text-light); margin-top:0.5rem;">
+      ★ = best in each metric. SFT-Wan VLM metrics (Interaction, Perspectivity, Instruction Following) are still being evaluated on the full 1000-video inference run.
+    </p>
+
+    <!-- Radar-style summary -->
+    <div style="margin-top:2rem; display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem;">
+      <div style="background:#fff; border-radius:10px; padding:1.25rem; box-shadow:var(--shadow);">
+        <h4 style="color:#1565c0; font-size:0.95rem; margin-bottom:0.5rem;">🔵 ABot Strengths</h4>
+        <ul style="font-size:0.85rem; color:var(--text); line-height:2; list-style:none; padding:0;">
+          <li>✅ High background consistency (91.18)</li>
+          <li>✅ Strong subject consistency (82.55)</li>
+          <li>✅ Robot identity well preserved</li>
+          <li>❌ Lower image / aesthetic quality</li>
+        </ul>
+      </div>
+      <div style="background:#fff; border-radius:10px; padding:1.25rem; box-shadow:var(--shadow);">
+        <h4 style="color:#c62828; font-size:0.95rem; margin-bottom:0.5rem;">🔴 Wan2.1 Strengths</h4>
+        <ul style="font-size:0.85rem; color:var(--text); line-height:2; list-style:none; padding:0;">
+          <li>✅ Best image quality (70.44)</li>
+          <li>✅ Best aesthetic quality (45.35)</li>
+          <li>❌ Low subject consistency (59.90)</li>
+          <li>❌ Human hand hallucination common</li>
+        </ul>
+      </div>
+      <div style="background:#fff; border-radius:10px; padding:1.25rem; box-shadow:var(--shadow);">
+        <h4 style="color:#2e7d32; font-size:0.95rem; margin-bottom:0.5rem;">🟢 SFT-Wan2.1 Signals</h4>
+        <ul style="font-size:0.85rem; color:var(--text); line-height:2; list-style:none; padding:0;">
+          <li>✅ Best flow score (21.29)</li>
+          <li>✅ Background consistency close to ABot</li>
+          <li>🔄 Subject consistency comparable to ABot</li>
+          <li>📊 VLM results pending full evaluation</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Method ===== -->
+  <section id="methods">
+    <div class="section-header">
+      <span class="accent-bar"></span>
+      <h2>Technical <span class="highlight">Approach</span></h2>
+    </div>
+
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap:1.5rem;">
+
+      <div class="video-card" style="border-top:3px solid #6a1b9a;">
+        <div class="card-body">
+          <div class="card-label giga">GigaWorld</div>
+          <div class="card-title">Large-Scale Video World Model</div>
+          <div class="card-desc" style="margin-top:0.4rem;">
+            Video pretraining + embodied finetuning. Public <b>GigaWorld-0-Video-GR1-2b</b> checkpoint run locally as smoke test. Demonstrates the "big video world model" paradigm for robot data generation.
+            <br><a href="https://arxiv.org/abs/2511.19861" target="_blank" style="color:var(--accent);">Paper →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="video-card" style="border-top:3px solid #1565c0;">
+        <div class="card-body">
+          <div class="card-label abot">ABot-PhysWorld</div>
+          <div class="card-title">Robot-Specific World Model</div>
+          <div class="card-desc" style="margin-top:0.4rem;">
+            Built on Wan2.1 with 3M robot video SFT + physics-aware DPO. Uses <b>action map / spatial injection</b> for action conditioning. Strong at robot identity and background stability.
+            <br><a href="https://arxiv.org/abs/2603.23376" target="_blank" style="color:var(--accent);">Paper →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="video-card" style="border-top:3px solid #c62828;">
+        <div class="card-body">
+          <div class="card-label wan">Vanilla Wan2.1</div>
+          <div class="card-title">General Video Generation Baseline</div>
+          <div class="card-desc" style="margin-top:0.4rem;">
+            14B diffusion transformer for I2V. Strong visual quality but weak robot identity preservation. Serves as the universal baseline for comparison.
+          </div>
+        </div>
+      </div>
+
+      <div class="video-card" style="border-top:3px solid #2e7d32;">
+        <div class="card-body">
+          <div class="card-label sft">VideoX-Fun + RoboTwin SFT</div>
+          <div class="card-title">LoRA Fine-Tuning Pipeline</div>
+          <div class="card-desc" style="margin-top:0.4rem;">
+            <b>Our approach</b>: Fine-tune Wan2.1 with LoRA (rank=32) on 2,500 RoboTwin robot manipulation videos using VideoX-Fun framework. Trained to step 2,200/12,500 on 2 GPUs. Checkpoint-2200 used for the 1000-video inference run.
+            <br><span style="color:var(--accent);">→ Best flow score, improved robot identity</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="video-card" style="border-top:3px solid #e65100;">
+        <div class="card-body">
+          <div class="card-label seedvr">SeedVR Refiner</div>
+          <div class="card-title">Post-Processing Enhancement</div>
+          <div class="card-desc" style="margin-top:0.4rem;">
+            SeedVR video refiner applied as a post-processing step to improve visual sharpness and reduce artifacts. Dynamic GPU selection for efficient batch processing.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== Insights ===== -->
+  <section id="insights" class="alt">
+    <div class="section-header">
+      <span class="accent-bar"></span>
+      <h2>Key <span class="highlight">Insights</span></h2>
+    </div>
+    <p class="section-desc">
+      Core observations from comparing robot-specific world models against general video generation models.
+    </p>
+    <div class="insights-grid">
+      <div class="insight-card">
+        <div class="insight-number">01</div>
+        <p><strong>Robot world models</strong> (ABot) are significantly better at preserving robot identity, background consistency, and subject stability compared to generic video models.</p>
+      </div>
+      <div class="insight-card">
+        <div class="insight-number">02</div>
+        <p><strong>General video models</strong> (Wan2.1) produce superior image quality and aesthetics, but suffer from human hand hallucination and scene drift for robotic domains.</p>
+      </div>
+      <div class="insight-card">
+        <div class="insight-number">03</div>
+        <p><strong>Small-scale SFT</strong> on robot data (2.5K RoboTwin samples) shows promising improvements in background consistency, subject consistency, and flow score — approaching ABot-level stability.</p>
+      </div>
+      <div class="insight-card">
+        <div class="insight-number">04</div>
+        <p><strong>Instruction/action alignment</strong> remains the hardest challenge. Even ABot shows only 54% instruction following. Physical plausibility of interactions is still limited.</p>
+      </div>
+      <div class="insight-card">
+        <div class="insight-number">05</div>
+        <p><strong>Post-processing (SeedVR)</strong> improves visual quality but does not fix underlying action semantics. It's a complementary enhancement, not a substitute for better models.</p>
+      </div>
+      <div class="insight-card">
+        <div class="insight-number">06</div>
+        <p><strong>There is a clear gap</strong> between "looking good" and "acting correctly" in robot video generation. Future work should focus on action conditioning, DPO-style alignment, and larger robot datasets.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BibTeX ===== -->
+  <section>
+    <div class="section-header">
+      <span class="accent-bar"></span>
+      <h2>References</h2>
+    </div>
+    <div class="bibtex">@article{luo2025gigaworld,
+  title={GigaWorld: Scaling Up Video World Model},
+  author={Luo, K and others},
+  journal={arXiv preprint arXiv:2511.19861},
+  year={2025}
+}
+
+@article{abot2026,
+  title={ABot-PhysWorld: Physics-Aware Action-Conditioned Embodied World Model},
+  author={AMAP-CVLab},
+  journal={arXiv preprint arXiv:2603.23376},
+  year={2026}
+}
+
+@article{wan2025,
+  title={Wan: Open and Advanced Large-Scale Video Generative Models},
+  author={Wan-AI},
+  journal={arXiv preprint},
+  year={2025}
+}
+
+@misc{worldarena2025,
+  title={WorldArena Challenge: Benchmarking Embodied World Models},
+  howpublished={https://worldarena.github.io},
+  year={2025}
+}</div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer>
+    <p>Built with care for the World Model Learning project.</p>
+    <p style="margin-top:0.25rem;">Videos and data © 2026 — All Rights Reserved.</p>
+  </footer>
+
+  <!-- ===== JS ===== -->
+  <script>
+    // Fade-in animation on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('section, .comparison-row, .case-grid, .insights-grid').forEach(el => {
+      el.classList.add('fade-in');
+      observer.observe(el);
+    });
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
