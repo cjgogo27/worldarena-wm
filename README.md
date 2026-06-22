@@ -1,6 +1,6 @@
 # World Model Learning & WorldArena Challenge
 
-项目主页（GitHub Pages 启用后）：[https://cjgogo27.github.io/worldarena-wm/](https://cjgogo27.github.io/worldarena-wm/)
+项目主页：[https://cjgogo27.github.io/worldarena-wm/](https://cjgogo27.github.io/worldarena-wm/)
 
 世界模型学习与 WorldArena 实验进展。三方对比 **ABot-PhysWorld**、**Vanilla Wan2.1**、**SFT-Wan2.1 (VideoX-Fun LoRA)** 在机器人视频生成上的表现。
 
