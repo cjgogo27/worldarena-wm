@@ -1,6 +1,6 @@
 # World Model Learning & WorldArena Challenge
 
-项目主页（GitHub Pages 启用后）：[https://cjgogo27.github.io/worldarena-wm/](https://cjgogo27.github.io/worldarena-wm/)
+项目主页：[https://YOUR_USERNAME.github.io/world-model-arena/](https://YOUR_USERNAME.github.io/world-model-arena/)
 
 世界模型学习与 WorldArena 实验进展。三方对比 **ABot-PhysWorld**、**Vanilla Wan2.1**、**SFT-Wan2.1 (VideoX-Fun LoRA)** 在机器人视频生成上的表现。
 
@@ -16,23 +16,22 @@ bash extract_videos.sh
 
 ### 2. 本地预览
 
-推荐启动本地静态服务器预览，避免浏览器对本地视频和相对路径的限制：
+直接用浏览器打开 `index.html` 即可：
 
 ```bash
-python3 -m http.server 8000
+open index.html     # macOS
+xdg-open index.html # Linux
 ```
-
-然后打开 `http://localhost:8000/`。如果需要给远程用户看，用 Kimaki tunnel 暴露 8000 端口。
 
 ### 3. 部署到 GitHub Pages
 
 ```bash
-# 1. 使用当前仓库（如 cjgogo27/worldarena-wm）
+# 1. 在 GitHub 创建一个新仓库（如 world-model-arena）
 # 2. 将当前目录初始化为 git 仓库
 git init
 git add .
 git commit -m "Initial commit: project showcase page"
-git remote add origin https://github.com/cjgogo27/worldarena-wm.git
+git remote add origin https://github.com/YOUR_USERNAME/world-model-arena.git
 git push -u origin main
 
 # 3. 在 GitHub 仓库 Settings → Pages 中：
@@ -41,14 +40,7 @@ git push -u origin main
 #    - Save
 ```
 
-等待 1-2 分钟后即可访问 `https://cjgogo27.github.io/worldarena-wm/`
-
-## 重要文档
-
-| 文档 | 用途 |
-|---|---|
-| `docs/code_run_flow.md` | 中文代码 / 运行流程说明：目录结构、环境、数据、训练、推理、SeedVR、评测、网站预览 |
-| `docs/reproduction_guide.md` | 英文复现指南：ABot、Wan2.1、VideoX-Fun、WorldArena、SeedVR 端到端流程 |
+等待 1-2 分钟后即可访问 `https://YOUR_USERNAME.github.io/world-model-arena/`
 
 ## 网站结构
 
@@ -57,9 +49,6 @@ git push -u origin main
 ├── css/
 │   └── style.css           # 样式表
 ├── js/                     # (预留 JS)
-├── docs/
-│   ├── code_run_flow.md     # 中文代码/运行流程说明
-│   └── reproduction_guide.md # 英文复现指南
 ├── videos/                 # 展示视频（运行 extract_videos.sh 生成）
 │   ├── episode10_abot.mp4
 │   ├── episode10_wan.mp4

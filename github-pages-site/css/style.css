@@ -23,7 +23,7 @@
   --border: #e0e0e0;
   --shadow: 0 2px 12px rgba(0,0,0,0.08);
   --gradient: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-  --font-main: 'Sora', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-serif: 'Georgia', 'Times New Roman', serif;
 }
 
@@ -168,38 +168,6 @@ nav a:hover {
   color: #fff;
 }
 
-.hero-stats {
-  position: relative;
-  z-index: 1;
-  width: min(920px, 100%);
-  margin: 2.5rem auto 0;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.85rem;
-}
-
-.hero-stats div {
-  background: rgba(255,255,255,0.09);
-  border: 1px solid rgba(255,255,255,0.14);
-  border-radius: 14px;
-  padding: 1rem;
-  backdrop-filter: blur(10px);
-}
-
-.hero-stats strong {
-  display: block;
-  color: #fff;
-  font-size: 1.3rem;
-  letter-spacing: -0.03em;
-}
-
-.hero-stats span {
-  display: block;
-  margin-top: 0.25rem;
-  color: rgba(255,255,255,0.68);
-  font-size: 0.74rem;
-}
-
 /* --- Section --- */
 section {
   padding: 4rem 2rem;
@@ -269,142 +237,6 @@ section .section-desc {
   color: var(--accent);
   font-size: 1.2rem;
   font-weight: 700;
-}
-
-/* --- Live status --- */
-.status-grid,
-.flow-grid,
-.docs-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.25rem;
-}
-
-.status-card,
-.flow-step,
-.doc-card {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 1.3rem;
-  box-shadow: var(--shadow);
-}
-
-.status-card h3,
-.flow-step h3,
-.doc-card h3 {
-  color: var(--primary);
-  font-size: 1rem;
-  margin: 0.55rem 0 0.4rem;
-}
-
-.status-card p,
-.flow-step p,
-.doc-card p {
-  color: var(--text-light);
-  font-size: 0.82rem;
-  line-height: 1.6;
-}
-
-.status-pill {
-  display: inline-flex;
-  align-items: center;
-  border-radius: 999px;
-  padding: 0.25rem 0.65rem;
-  font-size: 0.68rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.status-pill.running { background: #e8f5e9; color: #2e7d32; }
-.status-pill.queued { background: #fff3e0; color: #e65100; }
-
-.progress {
-  height: 10px;
-  background: #eef1f6;
-  border-radius: 99px;
-  overflow: hidden;
-  margin: 1rem 0 0.5rem;
-}
-
-.progress span {
-  display: block;
-  height: 100%;
-  background: linear-gradient(90deg, #2e7d32, #7dd87d);
-  border-radius: inherit;
-}
-
-.progress.seedvr span {
-  background: linear-gradient(90deg, #e65100, #ffb74d);
-}
-
-.mini-flow {
-  margin-top: 1rem;
-  background: var(--primary);
-  color: #a0d2ff;
-  border-radius: 10px;
-  padding: 0.75rem;
-  font-family: var(--font-mono, 'JetBrains Mono', monospace);
-  font-size: 0.72rem;
-  line-height: 1.55;
-}
-
-.flow-step {
-  position: relative;
-  overflow: hidden;
-  border-top: 4px solid var(--accent2);
-}
-
-.flow-step b {
-  color: var(--accent);
-  font-size: 1.8rem;
-  opacity: 0.35;
-}
-
-.flow-step code {
-  display: block;
-  margin-top: 0.8rem;
-  background: #f5f7fb;
-  border: 1px solid #e5e9f2;
-  border-radius: 8px;
-  padding: 0.55rem;
-  color: #0f3460;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.68rem;
-  overflow-wrap: anywhere;
-}
-
-.doc-card {
-  color: inherit;
-  text-decoration: none;
-  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-}
-
-.doc-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 28px rgba(15, 52, 96, 0.12);
-  border-color: rgba(233,69,96,0.35);
-}
-
-.doc-card span {
-  display: inline-flex;
-  border-radius: 999px;
-  background: #eef3ff;
-  color: var(--accent2);
-  padding: 0.2rem 0.55rem;
-  font-size: 0.68rem;
-  font-weight: 700;
-}
-
-.doc-card.primary-doc {
-  border-color: rgba(233,69,96,0.25);
-  background: linear-gradient(180deg, #fff 0%, #fff6f8 100%);
-}
-
-.doc-card.primary-doc span {
-  background: #fce4ec;
-  color: var(--accent);
 }
 
 /* --- Video Grids --- */
@@ -667,7 +499,6 @@ footer a:hover {
 /* --- Responsive --- */
 @media (max-width: 900px) {
   .hero h1 { font-size: 2.2rem; }
-  .hero-stats { grid-template-columns: repeat(2, 1fr); }
   .comparison-row { grid-template-columns: 1fr; }
   .video-grid.cols-3 { grid-template-columns: 1fr; }
   .video-grid.cols-2 { grid-template-columns: 1fr; }
@@ -678,7 +509,6 @@ footer a:hover {
 @media (max-width: 600px) {
   .hero { padding: 6rem 1rem 3rem; }
   .hero h1 { font-size: 1.6rem; }
-  .hero-stats { grid-template-columns: 1fr; }
   section { padding: 2.5rem 1rem; }
   .pipeline .step { min-width: 80px; padding: 0.5rem 0.75rem; font-size: 0.75rem; }
 }

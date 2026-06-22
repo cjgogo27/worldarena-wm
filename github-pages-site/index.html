@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>World Model Learning &amp; WorldArena Challenge</title>
-  <meta name="description" content="WorldArena 机器人视频世界模型项目主页：ABot、Wan2.1、VideoX-Fun LoRA SFT、SeedVR 后处理、1000-video 推理进度与完整代码运行流程。">
+  <meta name="description" content="世界模型学习与WorldArena实验进展 — ABot、Wan2.1、VideoX-Fun SFT三方对比，展示机器人视频世界模型的最新研究成果。">
   <meta property="og:image" content="videos/teaser.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -16,12 +16,10 @@
   <!-- ===== Navigation ===== -->
   <nav>
     <a href="#overview">Overview</a>
-    <a href="#status">Status</a>
-    <a href="#comparison">Videos</a>
+    <a href="#comparison">Comparison</a>
     <a href="#metrics">Metrics</a>
-    <a href="#flow">Run Flow</a>
+    <a href="#cases">Cases</a>
     <a href="#methods">Methods</a>
-    <a href="#docs">Docs</a>
     <a href="#insights">Insights</a>
   </nav>
 
@@ -38,18 +36,10 @@
     </div>
     <div class="meta-links">
       <a href="#overview">Project Overview</a>
-      <a href="docs/code_run_flow.md" target="_blank">Code / Run Flow</a>
-      <a href="docs/reproduction_guide.md" target="_blank">Reproduction Guide</a>
       <a href="https://github.com/amap-cvlab/ABot-PhysWorld" target="_blank">ABot-PhysWorld</a>
       <a href="https://github.com/Wan-AI/Wan2.1" target="_blank">Wan2.1</a>
       <a href="https://github.com/ali-vilab/VideoX-Fun" target="_blank">VideoX-Fun</a>
       <a href="https://github.com/open-gigaai/giga-world-0" target="_blank">GigaWorld</a>
-    </div>
-    <div class="hero-stats" aria-label="project status summary">
-      <div><strong>2,500</strong><span>RoboTwin SFT videos</span></div>
-      <div><strong>22</strong><span>LoRA checkpoints</span></div>
-      <div><strong>953 / 1000</strong><span>raw eval videos ready</span></div>
-      <div><strong>952 / 1000</strong><span>SeedVR videos ready</span></div>
     </div>
   </header>
 
@@ -102,39 +92,6 @@
         </div>
       </div>
       <p style="text-align:center; font-size:0.82rem; color:var(--text-light);">Case 10 — Robot arm interacts with objects on a table. Organized scene setting.</p>
-    </div>
-  </section>
-
-  <!-- ===== Live Status ===== -->
-  <section id="status" class="alt">
-    <div class="section-header">
-      <span class="accent-bar"></span>
-      <h2>Live Evaluation <span class="highlight">Status</span></h2>
-    </div>
-    <p class="section-desc">
-      The site now exposes both finished comparison results and the current full-scale checkpoint-2200 evaluation. Counts are from the active local run on May 9, 2026 UTC.
-    </p>
-    <div class="status-grid">
-      <div class="status-card">
-        <span class="status-pill running">Running</span>
-        <h3>Checkpoint-2200 raw inference</h3>
-        <p>VideoX-Fun + Wan2.1-I2V-14B + RoboTwin LoRA, split across GPU workers with TeaCache.</p>
-        <div class="progress"><span style="width:95.3%"></span></div>
-        <strong>953 / 1000 videos generated</strong>
-      </div>
-      <div class="status-card">
-        <span class="status-pill running">Running</span>
-        <h3>SeedVR refinement</h3>
-        <p>Post-processes raw videos for sharper visual quality while keeping action semantics unchanged.</p>
-        <div class="progress seedvr"><span style="width:95.2%"></span></div>
-        <strong>952 / 1000 videos refined</strong>
-      </div>
-      <div class="status-card">
-        <span class="status-pill queued">Queued</span>
-        <h3>Final evaluation</h3>
-        <p>After 1000 videos are ready: flatten videos, build manifest, run WorldArena metrics, run VLM judge, then resume SFT training.</p>
-        <div class="mini-flow">Raw MP4 → Manifest → Metrics → VLM → Resume Train</div>
-      </div>
     </div>
   </section>
 
@@ -206,23 +163,6 @@
     </div>
   </section>
 
-  <!-- ===== Run Flow ===== -->
-  <section id="flow">
-    <div class="section-header">
-      <span class="accent-bar"></span>
-      <h2>Code &amp; Run <span class="highlight">Flow</span></h2>
-    </div>
-    <p class="section-desc">
-      The project is organized as a reproducible pipeline rather than a single script. Each stage writes explicit outputs that the next stage consumes.
-    </p>
-    <div class="flow-grid">
-      <div class="flow-step"><b>01</b><h3>Prepare data</h3><p>Convert RoboTwin videos to VideoX-Fun metadata and build WorldArena test manifests.</p><code>datasets/worldarena_wan_i2v_clean50</code></div>
-      <div class="flow-step"><b>02</b><h3>Train LoRA</h3><p>Fine-tune Wan2.1 I2V through VideoX-Fun with checkpoint auto-resume.</p><code>VideoX-Fun/scripts/wan2.1/train_worldarena_wan_i2v_lora.sh</code></div>
-      <div class="flow-step"><b>03</b><h3>Generate videos</h3><p>Run parallel checkpoint-2200 inference on WorldArena 1000 episodes.</p><code>batch_predict_i2v_worldarena.py</code></div>
-      <div class="flow-step"><b>04</b><h3>Refine + evaluate</h3><p>Apply SeedVR, build generated dataset, run standard WorldArena metrics and VLM judge.</p><code>finish_eval_ckpt_latest_test1000.sh</code></div>
-    </div>
-  </section>
-
   <!-- ===== SeedVR Enhancement ===== -->
   <section>
     <div class="section-header">
@@ -251,34 +191,6 @@
           <div class="card-desc">Episode 105 — Refined output: improved sharpness and reduced artifacts.</div>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- ===== Documentation ===== -->
-  <section id="docs" class="alt">
-    <div class="section-header">
-      <span class="accent-bar"></span>
-      <h2>Documentation <span class="highlight">Map</span></h2>
-    </div>
-    <p class="section-desc">
-      The website is only the visual summary. Use these documents when you need exact commands, paths, troubleshooting notes, or experiment history.
-    </p>
-    <div class="docs-grid">
-      <a class="doc-card primary-doc" href="docs/code_run_flow.md" target="_blank">
-        <span>新</span>
-        <h3>代码 / 运行流程说明</h3>
-        <p>中文主文档：目录结构、环境、数据、训练、推理、SeedVR、评测与监控命令。</p>
-      </a>
-      <a class="doc-card" href="docs/reproduction_guide.md" target="_blank">
-        <span>Guide</span>
-        <h3>Reproduction Guide</h3>
-        <p>英文复现指南：ABot、Wan2.1、VideoX-Fun、WorldArena、SeedVR 的端到端说明。</p>
-      </a>
-      <a class="doc-card" href="README.md" target="_blank">
-        <span>Quick</span>
-        <h3>Website README</h3>
-        <p>页面预览、视频提取和 GitHub Pages 部署说明。</p>
-      </a>
     </div>
   </section>
 
@@ -543,8 +455,8 @@
 
   <!-- ===== Footer ===== -->
   <footer>
-    <p>Built for the WorldArena Robot Video World Model project.</p>
-    <p style="margin-top:0.25rem;">Videos, data, and checkpoints © 2026 — Research preview.</p>
+    <p>Built with care for the World Model Learning project.</p>
+    <p style="margin-top:0.25rem;">Videos and data © 2026 — All Rights Reserved.</p>
   </footer>
 
   <!-- ===== JS ===== -->
